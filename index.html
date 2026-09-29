@@ -23,6 +23,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
             width: 300px;
+            margin-bottom: 15px;
         }
         h2 {
             margin-bottom: 5px;
@@ -94,6 +95,20 @@
             display: inline-block;
             transition: 0.3s;
         }
+        .install-btn {
+            display: inline-block;
+            background: #0071e3;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .install-btn:hover {
+            background: #0077ed;
+        }
     </style>
 </head>
 <body>
@@ -113,22 +128,26 @@
         <div id="status-badge">Status: Inactive</div>
     </div>
 
+    <!-- Install Profile Card -->
+    <div class="card">
+        <h3 style="margin-top:0; font-size: 18px;">Setup DNS</h3>
+        <p style="margin-bottom: 15px;">Download your custom profile</p>
+        <a href="dns.mobileconfig" class="install-btn">Install DNS Profile</a>
+    </div>
+
     <script>
         async function toggleTraffic() {
             const isChecked = document.getElementById('trafficToggle').checked;
             const badge = document.getElementById('status-badge');
 
-            // --- REPLACE THESE WITH YOUR ACTUAL NEXTDNS DETAILS ---
             const profileId = 'f922fe'; 
             const apiKey = 'b0939cfbab68bc90dbb7c7b4f9ad58055c437aef';
-            // -----------------------------------------------------
 
             const endpoint = `https://api.nextdns.io/profiles/${profileId}`;
 
             badge.innerText = 'Status: Updating...';
 
             try {
-                // Example payload updating base settings or status via NextDNS API
                 const response = await fetch(endpoint, {
                     method: 'PATCH',
                     headers: {
@@ -136,7 +155,6 @@
                         'X-Api-Key': apiKey
                     },
                     body: JSON.stringify({
-                        // Toggling security block status or a custom root modifier as an example
                         security: {
                             aiThreatDetection: isChecked
                         }
