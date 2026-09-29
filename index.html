@@ -114,23 +114,51 @@
     </div>
 
     <script>
-        function toggleTraffic() {
+        async function toggleTraffic() {
             const isChecked = document.getElementById('trafficToggle').checked;
             const badge = document.getElementById('status-badge');
 
-            if (isChecked) {
-                badge.style.backgroundColor = '#d1e7dd';
-                badge.style.color = '#0f5132';
-                badge.innerText = 'Status: Traffic Active (Routing)';
-                
-                // Add your trigger code here (e.g., fetch request or redirect)
-                console.log("Traffic activated");
-            } else {
-                badge.style.backgroundColor = '#e5e5ea';
-                badge.style.color = '#3a3a3c';
-                badge.innerText = 'Status: Inactive';
-                
-                console.log("Traffic deactivated");
+            // --- REPLACE THESE WITH YOUR ACTUAL NEXTDNS DETAILS ---
+            const profileId = 'f922fe'; 
+            const apiKey = 'b0939cfbab68bc90dbb7c7b4f9ad58055c437aef';
+            // -----------------------------------------------------
+
+            const endpoint = `https://api.nextdns.io/profiles/${profileId}`;
+
+            badge.innerText = 'Status: Updating...';
+
+            try {
+                // Example payload updating base settings or status via NextDNS API
+                const response = await fetch(endpoint, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Api-Key': apiKey
+                    },
+                    body: JSON.stringify({
+                        // Toggling security block status or a custom root modifier as an example
+                        security: {
+                            aiThreatDetection: isChecked
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    if (isChecked) {
+                        badge.style.backgroundColor = '#d1e7dd';
+                        badge.style.color = '#0f5132';
+                        badge.innerText = 'Status: Traffic Active (Routing On)';
+                    } else {
+                        badge.style.backgroundColor = '#e5e5ea';
+                        badge.style.color = '#3a3a3c';
+                        badge.innerText = 'Status: Inactive';
+                    }
+                } else {
+                    badge.innerText = 'Status: API Error (Check Keys)';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                badge.innerText = 'Status: Connection Failed';
             }
         }
     </script>
